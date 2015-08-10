@@ -23,7 +23,7 @@ object Dependencies {
     val can     = "io.spray" %% "spray-can"                    % version
     val routing = "io.spray" %% "spray-routing-shapeless2"     % version
     val client  = "io.spray" %% "spray-client"                 % version
-    val json    = "io.spray"            %%  "spray-json"       % "1.3.1"
+    val json    = "io.spray" %%  "spray-json"                  % "1.3.1"
 
     val testkit = ("io.spray" %% "spray-testkit"            % version)
       .exclude("org.scalamacros", "quasiquotes_2.10.3")
