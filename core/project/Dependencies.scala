@@ -32,14 +32,14 @@ object Dependencies {
   object scalaz {
     val core = "org.scalaz" %% "scalaz-core" % "7.1.2"
   }
-
-  object slf4j {
-    val version = "1.7.12"
-
-    val slf4j_simple     = "org.slf4j"              % "slf4j-simple" % version
-    val slf4j_api        = "org.slf4j"              % "slf4j-api"    % version
-  }
-
+//
+//  object slf4j {
+//    val version = "1.7.12"
+//
+//    val slf4j_simple     = "org.slf4j"              % "slf4j-simple" % version
+//    val slf4j_api        = "org.slf4j"              % "slf4j-api"    % version
+//  }
+//
   val typesafeConfig   = "com.typesafe"           % "config"        % "1.3.0"
 
   val reactiveKafka    = "com.softwaremill"       %% "reactive-kafka" % "0.7.0"

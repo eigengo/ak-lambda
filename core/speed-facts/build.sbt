@@ -16,7 +16,6 @@ libraryDependencies ++= Seq(
   spray.routing,
   spray.json,
   reactiveKafka,
-  slf4j.slf4j_simple,
   // Testing
   scalatest % "test",
   scalacheck % "test"
