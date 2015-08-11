@@ -2,7 +2,7 @@ import Dependencies._
 
 Build.Settings.project
 
-name := "ingest"
+name := "speed-facts"
 
 libraryDependencies ++= Seq(
   // Core Akka

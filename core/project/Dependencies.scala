@@ -41,12 +41,14 @@ object Dependencies {
   }
 
   val typesafeConfig   = "com.typesafe"           % "config"        % "1.3.0"
- 
+
+  val reactiveKafka    = "com.softwaremill"       %% "reactive-kafka" % "0.7.0"
+
   // Datastax Cassandra Client
   // val cassandra_driver = "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.5" exclude("io.netty", "netty")
 
   // Testing
-  val scalatest        = "org.scalatest"          %% "scalatest"    % "2.2.4"
-  val scalacheck       = "org.scalacheck"         %% "scalacheck"   % "1.12.4"
+  val scalatest        = "org.scalatest"          %% "scalatest"      % "2.2.4"
+  val scalacheck       = "org.scalacheck"         %% "scalacheck"     % "1.12.4"
 
 }
