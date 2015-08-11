@@ -19,7 +19,7 @@ object BaseSettings extends sbtassembly.AssemblyKeys {
   val baseSettings: Seq[Def.Setting[_]] =
     graphSettings ++ 
     Seq(
-      organization := "org.eigengo",
+      organization := "org.eigengo.akl",
       scalaVersion := "2.11.7",
       version := "1.0.0-SNAPSHOT",
       scalacOptions in Compile ++= Seq("-encoding", "UTF-8", "-target:jvm-1.8", "-Ybackend:GenBCode", "-Ydelambdafy:method", "-deprecation", "-unchecked", "-Ywarn-dead-code", "-feature"),
@@ -50,6 +50,7 @@ object BaseSettings extends sbtassembly.AssemblyKeys {
         case PathList("javax", "transaction", xs @ _*)                           => MergeStrategy.first
         case PathList("javax", "mail", xs @ _*)                                  => MergeStrategy.first
         case PathList("javax", "activation", xs @ _*)                            => MergeStrategy.first
+        case "META-INF/io.netty.versions.properties"                             => MergeStrategy.first
         case PathList(ps @ _*) if ps.last endsWith ".html"                       => MergeStrategy.first
         case "log4j.properties"                                                  => MergeStrategy.concat
         case "unwanted.txt"                                                      => MergeStrategy.discard

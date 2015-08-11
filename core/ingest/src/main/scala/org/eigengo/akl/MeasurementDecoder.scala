@@ -1,9 +1,12 @@
 package org.eigengo.akl
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, Props}
 import akka.persistence.PersistentActor
+import akka.stream.ActorMaterializer
+import akka.stream.actor.ActorPublisher
+import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
-import org.eignego.akl.KafkaPublisher
+import org.eignego.akl.RK
 
 /**
  * Decoder CO
@@ -17,7 +20,7 @@ object MeasurementDecoder {
  * @param deviceId the device identity
  */
 abstract class AbstractMeasurementDecoder(deviceId: DeviceId) extends PersistentActor {
-  def publisher: ActorRef
+  def publish(value: String): Unit
 
   /** adds persistenceId method to DeviceId */
   private implicit class DeviceIdPersistenceId(deviceId: DeviceId) {
@@ -28,11 +31,21 @@ abstract class AbstractMeasurementDecoder(deviceId: DeviceId) extends Persistent
 
   override def receiveCommand: Receive = {
     case data: ByteString ⇒
+
       println(s"Received $data from $deviceId")
-      publisher ! data
+      publish(data.toString())
   }
 
   override val persistenceId: String = deviceId.persistenceId("measurement-decoder")
 }
 
-class KafkaMeasurementDecoder(deviceId: DeviceId) extends AbstractMeasurementDecoder(deviceId) with KafkaPublisher
+// TODO: This is not a great integration of Akka Streams!
+class KafkaMeasurementDecoder(deviceId: DeviceId) extends AbstractMeasurementDecoder(deviceId) with ActorPublisher[String] {
+  private implicit val materializer = ActorMaterializer()
+  val publish = RK.publish(RK.producerProperties)(context.system)
+  Source(ActorPublisher(self)).to(Sink(publish)).run()
+
+  def publish(value: String): Unit = {
+    onNext(value)
+  }
+}

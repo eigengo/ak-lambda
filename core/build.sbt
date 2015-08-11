@@ -24,7 +24,7 @@ lazy val speedRules = project.in(file("speed-rules")).settings(Build.Settings.pr
   .dependsOn(infrastructure, speedProtocol, ingestProtocol, common)
 
 lazy val speedFacts = project.in(file("speed-facts")).settings(Build.Settings.project)
-  .dependsOn(speedProtocol, common)
+  .dependsOn(infrastructure, speedProtocol, common)
 
 lazy val speed = project.in(file("speed")).settings(Build.Settings.project)
   .dependsOn(speedProtocol, common, speedRules, speedFacts)

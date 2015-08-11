@@ -46,7 +46,7 @@ object Dependencies {
   val reactiveKafka    = "com.softwaremill"       %% "reactive-kafka" % "0.7.0"
 
   // Datastax Cassandra Client
-  val cassandra_driver = "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.7" exclude("io.netty", "netty")
+  val cassandra_driver = "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.7" //exclude("io.netty", "netty-transport") exclude("io.netty", "netty-handler") exclude("io.netty", "netty-codec")
 
   // Testing
   val scalatest        = "org.scalatest"          %% "scalatest"      % "2.2.4"
