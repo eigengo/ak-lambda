@@ -1,13 +1,15 @@
-package org.eigengo.akl
+package org.eignego.akl
 
 import akka.actor.{Actor, ActorRef}
 import com.softwaremill.react.kafka.{ConsumerProperties, ProducerProperties, ReactiveKafka}
 import kafka.serializer.{StringDecoder, StringEncoder}
 
-object KafkaPublisher {
-  lazy val kafkaBrokers = System.getenv().getOrDefault("KAFKA_BROKERS", "192.168.59.104:32769")
-  lazy val zookeeperHost = System.getenv().getOrDefault("ZOOKEEPER_HOST", "192.168.59.104:32768")
-  lazy val kafka = new ReactiveKafka()
+
+private[akl] object CommonKafka {
+  // TODO: Move to Akka extension to avoid the gymnastics with ``System.getenv()...``
+  private lazy val kafkaBrokers = System.getProperty("KAFKA_BROKERS")
+  private lazy val zookeeperHost = System.getProperty("ZOOKEEPER_HOST")
+  private lazy val kafka = new ReactiveKafka()
 
   lazy val producerProperties = ProducerProperties(
     brokerList = kafkaBrokers,
@@ -26,10 +28,12 @@ object KafkaPublisher {
 
   lazy val producerActorProps = kafka.producerActorProps(producerProperties)
   lazy val consumerActorProps = kafka.consumerActorProps(consumerProperties)
+
+//  kafka.consume(consumerProperties)
 }
 
 trait KafkaPublisher {
   this: Actor ⇒
 
-  lazy val publisher: ActorRef = context.actorOf(KafkaPublisher.consumerActorProps)
+  lazy val publisher: ActorRef = context.actorOf(CommonKafka.consumerActorProps)
 }

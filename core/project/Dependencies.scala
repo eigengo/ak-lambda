@@ -11,8 +11,9 @@ object Dependencies {
     val contrib               = "com.typesafe.akka"      %% "akka-contrib"                  % version intransitive()
     val persistence           = "com.typesafe.akka"      %% "akka-persistence-experimental" % version intransitive()
     val persistence_cassandra = "com.github.krasserm"    %% "akka-persistence-cassandra"    % "0.3.9" intransitive()
+    val streams               = "com.typesafe.akka"      %% "akka-stream-experimental"      % "1.0"
 
-    val leveldb               = "org.iq80.leveldb"        % "leveldb"                       % "0.7"
+    // val leveldb               = "org.iq80.leveldb"        % "leveldb"                       % "0.7"
 
     val testkit               = "com.typesafe.akka"      %% "akka-testkit"                  % version
   }
@@ -45,7 +46,7 @@ object Dependencies {
   val reactiveKafka    = "com.softwaremill"       %% "reactive-kafka" % "0.7.0"
 
   // Datastax Cassandra Client
-  // val cassandra_driver = "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.5" exclude("io.netty", "netty")
+  val cassandra_driver = "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.7" exclude("io.netty", "netty")
 
   // Testing
   val scalatest        = "org.scalatest"          %% "scalatest"      % "2.2.4"

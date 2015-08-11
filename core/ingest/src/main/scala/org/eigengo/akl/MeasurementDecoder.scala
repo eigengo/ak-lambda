@@ -1,9 +1,9 @@
 package org.eigengo.akl
 
-import akka.actor.{ActorRef, Props, Actor}
+import akka.actor.{Actor, ActorRef, Props}
 import akka.persistence.PersistentActor
 import akka.util.ByteString
-import com.softwaremill.react.kafka.ReactiveKafka
+import org.eignego.akl.KafkaPublisher
 
 /**
  * Decoder CO
@@ -36,4 +36,3 @@ abstract class AbstractMeasurementDecoder(deviceId: DeviceId) extends Persistent
 }
 
 class KafkaMeasurementDecoder(deviceId: DeviceId) extends AbstractMeasurementDecoder(deviceId) with KafkaPublisher
-
