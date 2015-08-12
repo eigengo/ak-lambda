@@ -1,0 +1,15 @@
+# Global DSE ring (Cassandra only)
+cassandraGlobal:
+  image: spotify/cassandra
+  ports:
+    - "9042:9042"
+# Global Kafka and Zookeeper
+zookeeperKafkaGlobal:
+  image: spotify/kafka
+  ports:
+    - "2181:2181"
+    - "9092:9092"
+  environment:
+    ADVERTISED_HOST: 192.168.59.103
+    ADVERTISED_PORT: 9092
+    TOPICS: "ingest"
