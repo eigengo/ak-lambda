@@ -1,11 +1,14 @@
+# Global DSE ring (Cassandra only)
 cassandraGlobal:
   image: spotify/cassandra
   ports:
     - "9042:9042"
+# DSE ring running within a multi-region compliance zone (Cassandra & Spark)
 cassandraCZ:
   image: spotify/cassandra
   ports:
     - "9042"
+# Global Kafka and Zookeeper
 zookeeperKafkaGlobal:
   image: spotify/kafka
   ports:
@@ -15,6 +18,7 @@ zookeeperKafkaGlobal:
     ADVERTISED_HOST: 192.168.59.103
     ADVERTISED_PORT: 9092
     TOPICS: "ingest"
+# Ingest service
 ingest:
   image: org.eigengo.akl/ingest
   ports:
@@ -44,8 +48,8 @@ speedRules:
     KAFKA_BROKERS: "global.kafka.akl.eigengo.org:9092"
     ZOOKEEPER_HOST: "global.zookeeper.akl.eigengo.org:2181"
     CASSANDRA_JOURNAL_GLOBAL_CPS: "global.journal.akl.eigengo.org"
-    CASSANDRA_JOURNAL_LOCAL_CPS:  "local.journal.akl.eigengo.org"
     CASSANDRA_SNAPSHOT_GLOBAL_CPS: "global.snapshot.akl.eigengo.org"
+    CASSANDRA_JOURNAL_LOCAL_CPS:  "local.journal.akl.eigengo.org"
     CASSANDRA_SNAPSHOT_LOCAL_CPS: "local.snapshot.akl.eigengo.org"
 
 #test-load:
