@@ -30,10 +30,7 @@ abstract class AbstractMeasurementDecoder(deviceId: DeviceId) extends Persistent
   override def receiveRecover: Receive = Actor.emptyBehavior
 
   override def receiveCommand: Receive = {
-    case data: ByteString ⇒
-
-      println(s"Received $data from $deviceId")
-      publish(data.toString())
+    case data: ByteString ⇒ publish(data.toString())
   }
 
   override val persistenceId: String = deviceId.persistenceId("measurement-decoder")
@@ -46,6 +43,6 @@ class KafkaMeasurementDecoder(deviceId: DeviceId) extends AbstractMeasurementDec
   Source(ActorPublisher(self)).to(Sink(publish)).run()
 
   def publish(value: String): Unit = {
-    onNext(value)
+    //onNext(value)
   }
 }
