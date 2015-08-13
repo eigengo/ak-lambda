@@ -12,11 +12,13 @@ import org.eignego.akl.{RK, DevelopmentEnvironment}
 object Main extends App with DevelopmentEnvironment {
   setup()
   implicit val system = ActorSystem("ingest", ConfigFactory.load("application.conf"))
-  implicit val materializer = ActorMaterializer()
 
-  val transport = IO(Tcp)
-  val endpoint = system.actorOf(MeasurementsEndpoint.props)
-  transport ! Tcp.Bind(endpoint, localAddress = new InetSocketAddress("0.0.0.0", 8080))
+  DecodingPipeline.server(system, "0.0.0.0", 8080)
+
+//  implicit val materializer = ActorMaterializer()
+//  val transport = IO(Tcp)
+//  val endpoint = system.actorOf(MeasurementsEndpoint.props)
+//  transport ! Tcp.Bind(endpoint, localAddress = new InetSocketAddress("0.0.0.0", 8080))
 
 //  import scala.concurrent.duration._
 //  for (x ← 0 to 100) {
