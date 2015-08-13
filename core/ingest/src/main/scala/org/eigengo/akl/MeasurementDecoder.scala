@@ -2,10 +2,9 @@ package org.eigengo.akl
 
 import akka.actor.{Actor, Props}
 import akka.persistence.PersistentActor
-import akka.stream.ActorMaterializer
 import akka.stream.actor.ActorPublisher
-import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
+import kafka.producer.KafkaProducer
 import org.eignego.akl.RK
 
 /**
@@ -38,11 +37,9 @@ abstract class AbstractMeasurementDecoder(deviceId: DeviceId) extends Persistent
 
 // TODO: This is not a great integration of Akka Streams!
 class KafkaMeasurementDecoder(deviceId: DeviceId) extends AbstractMeasurementDecoder(deviceId) with ActorPublisher[String] {
-  private implicit val materializer = ActorMaterializer()
-  val publish = RK.publish(RK.producerProperties)(context.system)
-  Source(ActorPublisher(self)).to(Sink(publish)).run()
+  val producer = new KafkaProducer(RK.producerProperties)
 
   def publish(value: String): Unit = {
-    //onNext(value)
+    producer.send(value)
   }
 }

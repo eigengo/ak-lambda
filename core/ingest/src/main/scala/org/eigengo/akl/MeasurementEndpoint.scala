@@ -19,7 +19,6 @@ class MeasurementEndpoint extends Actor {
   private def connected(decoder: ActorRef): Receive = {
     case Tcp.Received(data) ⇒
       decoder ! data
-      sender() ! Tcp.Write(ByteString.empty)
 
     case Tcp.PeerClosed ⇒ context.stop(self)
   }
@@ -31,7 +30,6 @@ class MeasurementEndpoint extends Actor {
 
       val decoder = context.actorOf(MeasurementDecoder.props(deviceId))
       context.become(connected(decoder))
-      sender() ! Tcp.Write(ByteString.empty)
   }
 
 }

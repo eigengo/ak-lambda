@@ -15,7 +15,7 @@ zookeeperKafkaGlobal:
     - "2181:2181"
     - "9092:9092"
   environment:
-    ADVERTISED_HOST: 192.168.59.103
+    ADVERTISED_HOST: 192.168.99.101
     ADVERTISED_PORT: 9092
     TOPICS: "ingest"
 # Ingest service
