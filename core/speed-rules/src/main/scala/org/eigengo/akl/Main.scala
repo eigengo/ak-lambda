@@ -2,7 +2,7 @@ package org.eigengo.akl
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.Source
 import com.typesafe.config.ConfigFactory
 import org.eignego.akl.{DevelopmentEnvironment, RK}
 
@@ -15,15 +15,19 @@ object Main extends App with DevelopmentEnvironment  {
 
   private def printStats: String ⇒ Unit = {
     var counter: Int = 0
+    var start: Long = 0
 
     { (s: String) ⇒
+      if (counter == 0) start = System.currentTimeMillis()
       counter += 1
-      if (counter % 1000 == 0) print(".")
+      if (counter % 100 == 0) {
+        println(s"Handled $counter messages")
+      }
       ()
     }
   }
 
-  Source(RK.subscribe(RK.consumerProperties)).runForeach(printStats)
+  Source(RK.subscribe(RK.consumerProperties)).runForeach(printStats) //x ⇒ println(x.substring(x.length - 50)))
 
 //  import scala.concurrent.duration._
 //  for (x ← 0 to 100) {

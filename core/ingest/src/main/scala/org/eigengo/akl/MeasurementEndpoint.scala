@@ -20,14 +20,17 @@ class MeasurementEndpoint extends Actor {
     case Tcp.Received(data) ⇒
       decoder ! data
 
-    case Tcp.PeerClosed ⇒ context.stop(self)
+    case Tcp.PeerClosed ⇒
+      decoder ! AbstractMeasurementDecoder.PeerClosed
+      context.stop(self)
   }
 
   override def receive: Receive = {
     case Tcp.Received(data) ⇒
       // The first payload is UTF-8 encoded data
-      val deviceId = DeviceId(data.decodeString("UTF-8").trim)
+      val deviceId = DeviceId(data.utf8String.trim)
 
+      // The following chunks are the device data to be decoded
       val decoder = context.actorOf(MeasurementDecoder.props(deviceId))
       context.become(connected(decoder))
   }
