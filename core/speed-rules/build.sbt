@@ -14,11 +14,9 @@ libraryDependencies ++= Seq(
   akka.persistence,
   akka.persistence_cassandra,
   akka.streams,
+  akka.http.http,
   cassandra_driver,
   scalaz.core,
-  spray.can,
-  spray.routing,
-  spray.json,
   reactiveKafka,
   // Testing
   scalatest % "test",

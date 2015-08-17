@@ -13,11 +13,18 @@ object Dependencies {
     val persistence_cassandra = "com.github.krasserm"    %% "akka-persistence-cassandra"    % "0.3.9" intransitive()
     val streams               = "com.typesafe.akka"      %% "akka-stream-experimental"      % "1.0"
 
-    // val leveldb               = "org.iq80.leveldb"        % "leveldb"                       % "0.7"
+    object http {
+      private val version = "1.0"
+      val core     = "com.typesafe.akka" %% "akka-http-core-experimental"       % version
+      val http     = "com.typesafe.akka" %% "akka-http-experimental"            % version
+      val json     = "com.typesafe.akka" %% "akka-http-spray-json-experimental" % version
+      val testkit = "com.typesafe.akka"  %% "akka-http-testkit-experimental"    % version
+    }
 
     val testkit               = "com.typesafe.akka"      %% "akka-testkit"                  % version
   }
 
+/*
   object spray {
     val version = "1.3.3"
 
@@ -29,6 +36,7 @@ object Dependencies {
     val testkit = ("io.spray" %% "spray-testkit"            % version)
       .exclude("org.scalamacros", "quasiquotes_2.10.3")
   }
+*/
 
   object scalaz {
     val core = "org.scalaz" %% "scalaz-core" % "7.1.2"
