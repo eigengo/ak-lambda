@@ -21,7 +21,6 @@ class MeasurementEndpoint extends Actor {
       decoder ! data
 
     case Tcp.PeerClosed ⇒
-      decoder ! AbstractMeasurementDecoder.PeerClosed
       context.stop(self)
   }
 
