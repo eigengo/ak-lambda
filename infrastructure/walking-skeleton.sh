@@ -1,0 +1,9 @@
+#!/bin/sh
+
+MESSAGE=`cat <<EOF
+ayqswesgdkzzsdzonvuafgoknnjjlrrtoejchlstnbavvmsbzvybbtuakdpixwxdvzkfsayafjqgrfpioqwwurpmtxvpxldolgxuxqaeqwqbftzrpmyindvcqozxjgzpbhuqewnnyjcakjekbetubyqqdmxohnijetlfdemnvxuukcogxkuykvegvojvevvtfvfkahxancrrvxdczjmgdzqsvmhaqryhutrhulsyydlmbpbxheqjbojikoxbwngmffzgfrmnhlpfppzhlamevibbkgszfkzumoxghhnvdhmklpbiouwwmfipppmgvpsqyhlwtgaxzflkmsqmvxvoxwyvhtacgpazwecltvhozleseicuewexhpckgaacaedbghvjwcmyjvlyzwrzctwqttzkxquwrxconcihtylbperlqwzdjagcjqemkvieetqhopeylskwotcbffajhksdwdlqdweuxtkanfvappocduwolwk*****
+EOF`
+
+echo "${#MESSAGE}"
+
+docker run eigrad/tcpkali --first-message 'xxx' --message "$MESSAGE" --message-rate 1 --connections 1 --duration 60 "$1"
