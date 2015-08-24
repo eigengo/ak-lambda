@@ -1,18 +1,15 @@
 package org.eigengo.akl
 
 import java.net.InetSocketAddress
-import java.nio.file.{Paths, Files}
+import java.nio.file.{Files, Paths}
 
 import akka.actor.ActorSystem
 import akka.cluster.ClusterEvent.MemberEvent
 import akka.io.{IO, Tcp}
-import akka.util.ByteString
 import com.typesafe.config.ConfigFactory
 import org.eigengo.akl.devices.KnownDevicesProcessor.{KnownDevicesSource, RegisterDevices}
 import org.eigengo.akl.devices.{KnownDevices, KnownDevicesProcessor}
 import org.eignego.akl.DevelopmentEnvironment
-
-import scala.io.Source
 
 object Main extends App with DevelopmentEnvironment {
   import collection.JavaConversions._
