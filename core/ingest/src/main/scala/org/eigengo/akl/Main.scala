@@ -4,6 +4,7 @@ import java.net.InetSocketAddress
 import java.nio.file.{Paths, Files}
 
 import akka.actor.ActorSystem
+import akka.cluster.ClusterEvent.MemberEvent
 import akka.io.{IO, Tcp}
 import akka.util.ByteString
 import com.typesafe.config.ConfigFactory
@@ -39,6 +40,8 @@ object Main extends App with DevelopmentEnvironment {
     val dp = KnownDevicesProcessor.actorOf(system)
     val ds = KnownDevices.actorOf(system)
 
-    //dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(Main.getClass.getResource("/devices-1.csv").toURI))))
+    system.eventStream.subscribe(printlnSender, classOf[MemberEvent])
+
+    dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(Main.getClass.getResource("/devices-1.csv").toURI))))
   }
 }
