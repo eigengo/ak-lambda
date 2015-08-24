@@ -24,14 +24,20 @@ class MeasurementEndpoint extends Actor {
       context.stop(self)
   }
 
+  private def invalidDevice(cause: ValidationFailed): Unit = {
+    sender() ! Tcp.Close
+    context.stop(self)
+  }
+
+  private def validDevice(deviceId: DeviceId): Unit = {
+    // The following chunks are the device data to be decoded
+    val decoder = context.actorOf(MeasurementDecoder.props(deviceId))
+    context.become(connected(decoder))
+  }
+
   override def receive: Receive = {
     case Tcp.Received(data) ⇒
-      // The first payload is UTF-8 encoded data
-      val deviceId = DeviceId(data.utf8String.trim)
-
-      // The following chunks are the device data to be decoded
-      val decoder = context.actorOf(MeasurementDecoder.props(deviceId))
-      context.become(connected(decoder))
+      DeviceId.parse(data).fold(invalidDevice, validDevice)
   }
 
 }

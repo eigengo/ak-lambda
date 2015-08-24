@@ -1,28 +1,44 @@
 package org.eigengo.akl
 
 import java.net.InetSocketAddress
+import java.nio.file.{Paths, Files}
 
 import akka.actor.ActorSystem
 import akka.io.{IO, Tcp}
+import akka.util.ByteString
 import com.typesafe.config.ConfigFactory
+import org.eigengo.akl.devices.KnownDevicesProcessor.{KnownDevicesSource, RegisterDevices}
+import org.eigengo.akl.devices.{KnownDevices, KnownDevicesProcessor}
 import org.eignego.akl.DevelopmentEnvironment
 
+import scala.io.Source
+
 object Main extends App with DevelopmentEnvironment {
+  import collection.JavaConversions._
   setup()
-  implicit val system = ActorSystem("ingest", ConfigFactory.load("application.conf"))
 
-  val transport = IO(Tcp)
-  val endpoint = system.actorOf(MeasurementsEndpoint.props)
-  transport ! Tcp.Bind(endpoint, localAddress = new InetSocketAddress("0.0.0.0", 8080))
+  val config = ConfigFactory.load("application.conf")
+  val ports = config.getIntList("akka.cluster.jvm-ports")
+  ports.foreach(startup)
 
-//  DecodingPipeline.server(system, "0.0.0.0", 8080)
+  def startup(port: Integer): Unit = {
+    val config = ConfigFactory.load("application.conf")
+    implicit val system = ActorSystem("ingest", ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$port").withFallback(config))
 
-//  implicit val materializer = ActorMaterializer()
-//  import scala.concurrent.duration._
-//  for (x ← 0 to 100) {
-//    Source(1.second, 10.microseconds, "aofhjaskjhfaksjfgalskjbgakdjfhgsdljhfgsdkjlfghsd").to(Sink(RK.publish(RK.producerProperties))).run()
-//  }
+    import akka.actor.ActorDSL._
+    implicit val printlnSender = actor(new Act {
+      become {
+        case x ⇒ println(">>>> " + x)
+      }
+    })
 
-  //Source(() ⇒ Iterator("some such", "none at all")).to(Sink(RK.publish(RK.producerProperties))).run()
+    val transport = IO(Tcp)
+    val endpoint = system.actorOf(MeasurementsEndpoint.props)
+    transport ! Tcp.Bind(endpoint, localAddress = new InetSocketAddress("0.0.0.0", 8080 + port))
 
+    val dp = KnownDevicesProcessor.actorOf(system)
+    val ds = KnownDevices.actorOf(system)
+
+    //dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(Main.getClass.getResource("/devices-1.csv").toURI))))
+  }
 }

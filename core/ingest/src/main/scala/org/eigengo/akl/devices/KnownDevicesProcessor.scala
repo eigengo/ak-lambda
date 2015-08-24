@@ -1,20 +1,27 @@
 package org.eigengo.akl.devices
 
-import akka.actor.Actor
+import akka.actor._
 import akka.persistence.PersistentActor
 import akka.util.ByteString
 import org.eigengo.akl.{ClientId, KnownDevice, PersistentActorValidation, ValidationFailed}
 
 import scalaz.{Failure, Success, Validation}
 
+/**
+ * Companion for the persistent actor
+ */
 object KnownDevicesProcessor {
+
+  private val props: Props = Props[KnownDevicesProcessor]
+
+  def actorOf(arf: ActorRefFactory): ActorRef = arf.actorOf(props, "known-devices-processor")
 
   sealed trait KnownDevicesSource
   case object KnownDevicesSource {
-    case class Csv(clientId: ClientId, source: ByteString) extends KnownDevicesSource
+    case class Csv(clientId: ClientId, source: Array[Byte]) extends KnownDevicesSource
     case class Single(knownDevice: KnownDevice) extends KnownDevicesSource
   }
-  
+
   case class RegisterDevices(knownDevicesSource: KnownDevicesSource)
 
   object RegisterDevices {

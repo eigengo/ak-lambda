@@ -4,7 +4,7 @@ trait DevelopmentEnvironment {
 
   def setup(): Unit = {
     val defaults: Map[String, String] = {
-      val dockerLocalHost = "192.168.99.101"
+      val dockerLocalHost = "192.168.99.100"
       Map(
         "CASSANDRA_JOURNAL_LOCAL_CPS" → dockerLocalHost,
         "CASSANDRA_JOURNAL_GLOBAL_CPS" → dockerLocalHost,
