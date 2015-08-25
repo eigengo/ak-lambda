@@ -26,9 +26,18 @@ object KnownDevicesProcessor {
   object RegisterDevices {
     import KnownDevicesSource._
 
+    object Validation {
+      case object MalformedCsvSource extends ValidationFailed
+    }
+
+    private def readCsv(clientId: ClientId, data: Array[Byte]): Validation[ValidationFailed, Seq[KnownDevice]] = {
+      if (data.length == 0) Failure(Validation.MalformedCsvSource)
+      else Failure(ValidationFailed.NotImplementedYet)
+    }
+
     def validate(source: KnownDevicesSource): Validation[ValidationFailed, Seq[KnownDevice]] = source match {
       case Single(kd) ⇒ Success(Seq(kd))
-      case Csv(_, _ ) ⇒ Failure(ValidationFailed.NotImplementedYet)
+      case Csv(c, d)  ⇒ readCsv(c, d)
     }
   }
 
