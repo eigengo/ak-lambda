@@ -17,7 +17,7 @@ object Main extends App with DevelopmentEnvironment {
 
   val config = ConfigFactory.load("application.conf")
   val ports = config.getIntList("akka.cluster.jvm-ports")
-  ports.foreach(startup)
+  ports.par.foreach(startup)
 
   def startup(port: Integer): Unit = {
     val config = ConfigFactory.load("application.conf")
@@ -39,6 +39,9 @@ object Main extends App with DevelopmentEnvironment {
 
     system.eventStream.subscribe(printlnSender, classOf[MemberEvent])
 
+    Thread.sleep(10000L)
+
+    println("Registering")
     dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(Main.getClass.getResource("/devices-1.csv").toURI))))
   }
 }

@@ -2,7 +2,6 @@ package org.eigengo.akl.devices
 
 import akka.actor._
 import akka.persistence.PersistentActor
-import akka.util.ByteString
 import org.eigengo.akl.{ClientId, KnownDevice, PersistentActorValidation, ValidationFailed}
 
 import scalaz.{Failure, Success, Validation}
@@ -44,7 +43,8 @@ class KnownDevicesProcessor extends PersistentActor with PersistentActorValidati
   override def receiveRecover: Receive = Actor.emptyBehavior
 
   override def receiveCommand: Receive = {
-    case RegisterDevices(source) ⇒ RegisterDevices.validate(source).fold(error ⇒ persistAsync(error)(constUnit), succ ⇒ persistAsync(succ)(constUnit))
+    case RegisterDevices(source) ⇒
+      sender() ! RegisterDevices.validate(source).map(succ ⇒ persistAsync(succ)(constUnit))
   }
 
   override def persistenceId: String = "known-devices"
