@@ -4,6 +4,8 @@ import akka.actor.{ActorRef, Props, Actor}
 import akka.io.Tcp
 import akka.util.ByteString
 
+import scalaz.NonEmptyList
+
 /**
  * MP companion
  */
@@ -21,18 +23,23 @@ class MeasurementEndpoint extends Actor {
       decoder ! data
 
     case Tcp.PeerClosed ⇒
-      decoder ! AbstractMeasurementDecoder.PeerClosed
       context.stop(self)
+  }
+
+  private def invalidDevice(cause: NonEmptyList[ValidationFailed]): Unit = {
+    sender() ! Tcp.Close
+    context.stop(self)
+  }
+
+  private def validDevice(deviceId: DeviceId): Unit = {
+    // The following chunks are the device data to be decoded
+    val decoder = context.actorOf(MeasurementDecoder.props(deviceId))
+    context.become(connected(decoder))
   }
 
   override def receive: Receive = {
     case Tcp.Received(data) ⇒
-      // The first payload is UTF-8 encoded data
-      val deviceId = DeviceId(data.utf8String.trim)
-
-      // The following chunks are the device data to be decoded
-      val decoder = context.actorOf(MeasurementDecoder.props(deviceId))
-      context.become(connected(decoder))
+      DeviceId(data).fold(invalidDevice, validDevice)
   }
 
 }
