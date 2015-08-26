@@ -6,3 +6,7 @@ package org.eigengo.akl
  */
 // TODO: This is just a skeleton, consider *proper* configuration
 case class DeviceConfiguration(services: Seq[String])
+
+object DeviceConfiguration {
+  val empty = DeviceConfiguration(Nil)
+}

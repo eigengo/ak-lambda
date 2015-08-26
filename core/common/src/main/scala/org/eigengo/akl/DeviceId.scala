@@ -4,7 +4,7 @@ import java.util.UUID
 
 import akka.util.ByteString
 
-import scalaz.\/
+import scalaz.{Validation, ValidationNel}
 
 /**
  * Identifies device identifier
@@ -13,9 +13,12 @@ import scalaz.\/
 case class DeviceId(id: UUID) extends AnyVal
 object DeviceId {
 
-  def parse(data: ByteString): ValidationFailed \/ DeviceId = {
-    val id = data.utf8String.trim
-    \/.fromTryCatchNonFatal(DeviceId(UUID.fromString(id))).leftMap(_ ⇒ ValidationFailed.NotValidUUID(id))
+  def apply(data: String): ValidationNel[ValidationFailed, DeviceId] = {
+    Validation.fromTryCatchNonFatal(DeviceId(UUID.fromString(data))).leftMap(_ ⇒ ValidationFailed.NotValidUUID(data)).toValidationNel
+  }
+
+  def apply(data: ByteString): ValidationNel[ValidationFailed, DeviceId] = {
+    apply(data.utf8String.trim)
   }
 
 }
