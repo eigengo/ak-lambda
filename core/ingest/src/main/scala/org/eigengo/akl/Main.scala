@@ -2,11 +2,14 @@ package org.eigengo.akl
 
 import java.net.InetSocketAddress
 import java.nio.file.{Files, Paths}
+import java.util.UUID
 
 import akka.actor.ActorSystem
 import akka.cluster.ClusterEvent.MemberEvent
 import akka.io.{IO, Tcp}
+import akka.persistence.Update
 import com.typesafe.config.ConfigFactory
+import org.eigengo.akl.devices.KnownDevices.GetKnownDevice
 import org.eigengo.akl.devices.KnownDevicesProcessor.{KnownDevicesSource, RegisterDevices}
 import org.eigengo.akl.devices.{KnownDevices, KnownDevicesProcessor}
 import org.eignego.akl.DevelopmentEnvironment
@@ -41,7 +44,10 @@ object Main extends App with DevelopmentEnvironment {
 
     Thread.sleep(10000L)
 
-    println("Registering")
-    dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(Main.getClass.getResource("/devices-1.csv").toURI))))
+    if (port == ports.head) dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(Main.getClass.getResource("/devices-1.csv").toURI))))
+    Thread.sleep(1000L)
+
+    ds ! GetKnownDevice(ClientId.one, DeviceId(UUID.fromString("6c7d1b1b-d7eb-4589-8e63-1788eecfe86f")))
+    ds ! GetKnownDevice(ClientId.one, DeviceId(UUID.fromString("6c7d1b1b-d7eb-4589-8e63-1788eecfe8ff")))
   }
 }

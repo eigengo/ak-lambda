@@ -4,6 +4,8 @@ import akka.actor.{ActorRef, Props, Actor}
 import akka.io.Tcp
 import akka.util.ByteString
 
+import scalaz.NonEmptyList
+
 /**
  * MP companion
  */
@@ -24,7 +26,7 @@ class MeasurementEndpoint extends Actor {
       context.stop(self)
   }
 
-  private def invalidDevice(cause: ValidationFailed): Unit = {
+  private def invalidDevice(cause: NonEmptyList[ValidationFailed]): Unit = {
     sender() ! Tcp.Close
     context.stop(self)
   }
@@ -37,7 +39,7 @@ class MeasurementEndpoint extends Actor {
 
   override def receive: Receive = {
     case Tcp.Received(data) ⇒
-      DeviceId.parse(data).fold(invalidDevice, validDevice)
+      DeviceId(data).fold(invalidDevice, validDevice)
   }
 
 }

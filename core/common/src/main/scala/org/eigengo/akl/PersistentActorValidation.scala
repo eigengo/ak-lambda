@@ -10,8 +10,7 @@ import scalaz.Validation
  */
 trait PersistentActorValidation {
   actor: PersistentActor ⇒
-
-  val constUnit: Any ⇒ Unit = { _ ⇒ ()}
+  import BadRobot._
 
   /**
    * Adds the ``persist`` and ``persistAsync`` functions that persist the failures and successes

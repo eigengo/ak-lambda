@@ -19,8 +19,10 @@ class KnownDevicesProcessorTest extends FlatSpec with Matchers {
   }
 
   "Invalid CSV source" should "fail import" in {
-    val Failure(NonEmptyList(NotValidUUID("@0B771ED-AF36-4E25-820B-5ABFAC61627E"), NotValidUUID("#0B771ED-AF36-4E25-820B-5ABFAC61627E"))) =
-      validate(KnownDevicesSource.Csv(ClientId.one, source("/bad-device-ids.csv")))
+    val Failure(NonEmptyList(
+      InvalidRowFormat("@0B771ED-AF36-4E25-820B-5ABFAC61627E", 0, NonEmptyList(NotValidUUID("@0B771ED-AF36-4E25-820B-5ABFAC61627E"))),
+      InvalidRowFormat("#0B771ED-AF36-4E25-820B-5ABFAC61627E", 1, NonEmptyList(NotValidUUID("#0B771ED-AF36-4E25-820B-5ABFAC61627E")))
+    )) = validate(KnownDevicesSource.Csv(ClientId.one, source("/bad-device-ids.csv")))
   }
 
   "Valid CSV source" should "import listed devices" in {
