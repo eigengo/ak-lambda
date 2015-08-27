@@ -1,0 +1,13 @@
+{
+  "name": "ak-lambda-scaffolding",
+  "description": "ak-lambda scaffolding project",
+  "repository":"https://github.com/eigengo/ak-lambda",
+  "version": "0.0.1",
+  "readme":"README.md",
+  "dependencies": {
+    "express": "*",
+    "concat-stream": "*",
+    "express-ws": "*",
+    "crypto-js": "*"
+  }
+}
