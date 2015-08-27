@@ -46,11 +46,9 @@ class KnownDevices extends PersistentView {
   import BadRobot._
   private var knownDevices: Map[DeviceId, DeviceConfiguration] = Map.empty
 
-  override def autoUpdate: Boolean = true
+  private lazy val clientId = ClientId(self.path.name).!
 
-  private val clientId = ClientId(self.path.name).!
-
-  override def viewId: String = s"known-devices-view-$clientId"
+  override lazy val viewId: String = s"known-devices-view-$clientId"
 
   override val persistenceId: String = "known-devices"
 
