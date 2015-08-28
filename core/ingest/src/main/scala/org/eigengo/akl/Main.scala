@@ -43,8 +43,13 @@ object Main extends App with DevelopmentEnvironment {
     system.eventStream.subscribe(printlnSender, classOf[MemberEvent])
 
     Thread.sleep(10000L)
+    val csvPath = Main.getClass.getResource("/devices-1.csv").toURI
 
-    if (port == ports.head) dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(Main.getClass.getResource("/devices-1.csv").toURI))))
+    val env = new HashMap<>(); 
+    env.put("create", "true");
+    val zipfs = FileSystems.newFileSystem(uri, env);
+
+    if (port == ports.head) dp ! RegisterDevices(KnownDevicesSource.Csv(ClientId.one, Files.readAllBytes(Paths.get(csvPath))))
     Thread.sleep(1000L)
 
     ds ! GetKnownDevice(ClientId.one, DeviceId(UUID.fromString("6c7d1b1b-d7eb-4589-8e63-1788eecfe86f")))
